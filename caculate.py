@@ -1,5 +1,5 @@
 import json
-import numbers
+from main import updateStatus
 
 fp = open('data.json', 'r')
 datas = json.load(fp)
