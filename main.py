@@ -47,6 +47,16 @@ def startProcess():
     
     updateStatus('完成')
     
+    fp = open('data.json', 'r')
+    datas = json.load(fp)
+    fp.close()
+    idx = 0
+    for data in datas:
+        treeview.insert('', idx, values=(data['date'], data['numbers'][0], data['numbers'][1], data['numbers'][2], data['numbers'][3], data['numbers'][4]))
+        idx = idx + 1
+    
+    
+    
     
 w_width = 640
 w_height = 480
@@ -61,9 +71,7 @@ root.geometry("640x480+100+100")
 
 tabCtl = ttk.Notebook(root, width=w_width, height=content_height)
 headTailTab = tk.Frame(tabCtl)
-historyTab = tk.Frame(tabCtl)
 tabCtl.add(headTailTab, text='頭/尾統計')
-tabCtl.add(historyTab, text='歷史獎號')
 
 tk.Label(headTailTab, width=3).grid(column=0, row=0)
 head  = tk.Label(headTailTab, text='').grid(column=1, row=1, sticky="E")
@@ -164,7 +172,28 @@ v_avg_tail7.grid(column=7, row=8, sticky="W")
 v_avg_tail8.grid(column=7, row=9, sticky="W")
 v_avg_tail9.grid(column=7, row=10, sticky="W")
 
+#歷史獎號頁面
+historyTab = tk.Frame(tabCtl)
+tabCtl.add(historyTab, text='歷史獎號')
 
+columns = ('開獎日期', '獎號1', '獎號2', '獎號3', '獎號4', '獎號5')
+treeview = ttk.Treeview(historyTab, height=18, show="headings", columns=columns)
+
+treeview.column('開獎日期', width=100, anchor='center')
+treeview.column('獎號1', width=50, anchor='center')
+treeview.column('獎號2', width=50, anchor='center')
+treeview.column('獎號3', width=50, anchor='center')
+treeview.column('獎號4', width=50, anchor='center')
+treeview.column('獎號5', width=50, anchor='center')
+
+treeview.heading('開獎日期', text='開獎日期')
+treeview.heading('獎號1',    text='獎號1')
+treeview.heading('獎號2',    text='獎號2')
+treeview.heading('獎號3',    text='獎號3')
+treeview.heading('獎號4',    text='獎號4')
+treeview.heading('獎號5',    text='獎號5')
+
+treeview.pack(side='left', fill='both')
 
 tabCtl.pack()
 
