@@ -1,8 +1,12 @@
 #!/bin/python3
 #coding:utf-8
 
-import tkinter as tk
-from tkinter import ttk
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
 import dataManager as dm
 
 #import caculate as cc
@@ -13,7 +17,8 @@ def updateStatus(status):
 def truncate(num, n):
     integer = int(num * (10**n))/(10**n)
     return float(integer)
-    
+
+'''    
 def startProcess():
     refreshBtn['state'] = tk.DISABLED
     ret = dm.initData(updateStatus)
@@ -65,7 +70,71 @@ def startProcess():
         print('Something wrong')
         #refreshBtn['state'] = tk.NORMAL
     refreshBtn['state'] = tk.NORMAL
+'''
+Builder.load_string("""
+<WelcomeScreen>:
+    BoxLayout:
+        Label:
+            text: 'Updating'
+
+<HeadTailScreen>:
+    BoxLayout:
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to welcome'
+            on_press: root.manager.current = 'welcome'
+            
+<HistoryScreen>:
+    BoxLayout:
+        Label:
+            text: '更新中'
+            
+<AboutScreen>:
+    BoxLayout:
+        Label:
+            text: '版本: 1.0.0'
+""")
+
     
+class WelcomeScreen(Screen):
+    pass
+class HeadTailScreen(Screen):
+    pass
+class HistoryScreen(Screen):
+    pass
+class AboutScreen(Screen):
+    pass
+
+class Colorful539(App):
+    def build(self):
+        sm = ScreenManager()
+        sm.add_widget(WelcomeScreen(name='welcome'))
+        sm.add_widget(HeadTailScreen(name='head_tail'))
+        sm.add_widget(HistoryScreen(name='hirstoy'))
+        sm.add_widget(AboutScreen(name='about'))
+        return sm
+ 
+    def startProcess():
+        ret = dm.initData()
+        if ret != -1:
+            result = dm.getResult()
+            datas = dm.getHistory()
+
+            '''
+            idx = 0
+            for data in datas:
+                treeview.insert('', idx, values=(data['date'], data['numbers'][0], data['numbers'][1], data['numbers'][2], data['numbers'][3], data['numbers'][4]))
+                idx = idx + 1
+            '''
+            if ret == 1:
+                updateStatus('完成')
+        else:
+            print('Something wrong')
+            
+Colorful539().run()
+
+'''
 version = "Version 1.0.0"    
 w_width = 640
 w_height = 480
@@ -228,3 +297,4 @@ versionLabel.pack(side=tk.LEFT, fill=tk.BOTH, padx=1, pady=1, ipadx=5)
 
 root.after(100, startProcess)
 root.mainloop()
+'''
