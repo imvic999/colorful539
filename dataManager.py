@@ -1,25 +1,21 @@
 #!/bin/python3
 #coding:utf-8
 
-from asyncio.windows_events import NULL
-from pydoc import pager
 import requests
 from bs4 import BeautifulSoup
 import json
 import caculate as cc
-#from main import updateStatus
 
 historyData = []
 result = dict()
 lastDate = ''
-updateStatusLocal = NULL
+updateStatusLocal = ()
 
 def initData(updateStatusFunction):
     global updateStatusLocal
     global result
     global historyData
     global lastDate
-    updateStatusLocal = updateStatusFunction
     fp = open('result.json', 'r')
     result = json.load(fp)
     fp.close()
@@ -27,6 +23,7 @@ def initData(updateStatusFunction):
     historyData = json.load(fp)
     fp.close()
     size = len(historyData)
+    updateStatusLocal = updateStatusFunction
     if size == 0:
         if fetchHistory() == -1:
             return -1

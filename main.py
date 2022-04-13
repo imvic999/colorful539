@@ -1,11 +1,8 @@
 #!/bin/python3
 #coding:utf-8
 
-from re import X
 import tkinter as tk
-from tkinter import DISABLED, ttk
-from tkinter.font import NORMAL
-from tkinter.tix import Tree
+from tkinter import ttk
 import dataManager as dm
 
 #import caculate as cc
@@ -18,7 +15,7 @@ def truncate(num, n):
     return float(integer)
     
 def startProcess():
-    refreshBtn['state'] = DISABLED
+    refreshBtn['state'] = tk.DISABLED
     ret = dm.initData(updateStatus)
     if ret != -1:
         result = dm.getResult()
@@ -63,11 +60,11 @@ def startProcess():
         if ret == 1:
             updateStatus('完成')
         #else:
-        #    refreshBtn['state'] = NORMAL
+        #    refreshBtn['state'] = tk.NORMAL
     else:
         print('Something wrong')
-        #refreshBtn['state'] = NORMAL
-    refreshBtn['state'] = NORMAL
+        #refreshBtn['state'] = tk.NORMAL
+    refreshBtn['state'] = tk.NORMAL
     
 version = "Version 1.0.0"    
 w_width = 640
@@ -190,7 +187,7 @@ v_avg_tail9.grid(column=7, row=10, sticky="W")
 
 tk.Label(headTailTab, width=10).grid(column=8, row=1)
 
-refreshBtn = tk.Button(headTailTab, text='重新整理', command=startProcess, state=DISABLED)
+refreshBtn = tk.Button(headTailTab, text='重新整理', command=startProcess, state=tk.DISABLED)
 refreshBtn.grid(column=9, row=1, rowspan=2, columnspan=2)
 
 #歷史獎號頁面
