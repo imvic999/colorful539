@@ -7,10 +7,11 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-import dataManager as dm
+from dataManager import dataManager 
 
 #import caculate as cc
 
+''' 
 def updateStatus(status):
     statusLabel['text'] = status
 
@@ -18,7 +19,6 @@ def truncate(num, n):
     integer = int(num * (10**n))/(10**n)
     return float(integer)
 
-'''    
 def startProcess():
     refreshBtn['state'] = tk.DISABLED
     ret = dm.initData(updateStatus)
@@ -73,17 +73,18 @@ def startProcess():
 '''
 Builder.load_string("""
 <WelcomeScreen>:
+    id: welcom
     BoxLayout:
         Label:
             text: 'Updating'
 
 <HeadTailScreen>:
+    id: headTail
     BoxLayout:
         Button:
             text: 'My settings button'
         Button:
             text: 'Back to welcome'
-            on_press: root.manager.current = 'welcome'
             
 <HistoryScreen>:
     BoxLayout:
@@ -99,6 +100,7 @@ Builder.load_string("""
     
 class WelcomeScreen(Screen):
     pass
+    
 class HeadTailScreen(Screen):
     pass
 class HistoryScreen(Screen):
@@ -107,19 +109,27 @@ class AboutScreen(Screen):
     pass
 
 class Colorful539(App):
+    
+    dm = dataManager()
+    
     def build(self):
-        sm = ScreenManager()
-        sm.add_widget(WelcomeScreen(name='welcome'))
-        sm.add_widget(HeadTailScreen(name='head_tail'))
-        sm.add_widget(HistoryScreen(name='hirstoy'))
-        sm.add_widget(AboutScreen(name='about'))
-        return sm
+        self.sm = ScreenManager()
+        self.sm.add_widget(AboutScreen(name='about'))
+        self.sm.add_widget(HistoryScreen(name='hirstoy'))
+        self.sm.add_widget(HeadTailScreen(name='head_tail'))
+        self.sm.add_widget(WelcomeScreen(name='welcome'))
+        self.sm.current = 'welcome'
+        return self.sm
  
-    def startProcess():
-        ret = dm.initData()
+    def on_start(self):
+        super().on_start()
+        self.startProcess()
+    
+    def startProcess(self):
+        ret = self.dm.initData()
         if ret != -1:
-            result = dm.getResult()
-            datas = dm.getHistory()
+            result = self.dm.result
+            datas = self.dm.historyData
 
             '''
             idx = 0
@@ -128,7 +138,7 @@ class Colorful539(App):
                 idx = idx + 1
             '''
             if ret == 1:
-                updateStatus('完成')
+                self.sm.current = 'head_tail'
         else:
             print('Something wrong')
             
